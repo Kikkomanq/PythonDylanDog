@@ -1,9 +1,11 @@
-from selenium import webdriver
-import time, requests
-from lxml import html
+import requests
+import time
 from unittest import TestCase, main
 
-kupindo_url="https://www.kupindo.com/"
+from lxml import html
+from selenium import webdriver
+
+url = "https://www.kupindo.com/"
 
 
 def get_actual_prices(url):
@@ -29,6 +31,7 @@ def get_actual_prices(url):
     return actual_prices
 
 
+
 class TestDylanDog(TestCase):
 
         def setUp(self):
@@ -36,20 +39,20 @@ class TestDylanDog(TestCase):
             self.driver.set_window_size(1120, 550)
 
         def test_url(self):
-            self.driver.get(kupindo_url)
+            self.driver.get(url)
 
             #search for Dylan Dog
             self.driver.find_element_by_id('txtPretraga').send_keys("Dylan Dog")
             self.driver.find_element_by_id("search_button").click()
             time.sleep(4)
 
-            #select sorting option Ascending -> Change option[3] to get sorting by Desccending
+            # select sorting option Ascending
             self.driver.find_element_by_xpath("//*[@id='container_right']/div[1]/div/select/option[2]").click()
 
             #Asserts sorted list if Equal
             self.assertListEqual(get_actual_prices(self.driver.current_url), sorted(get_actual_prices(self.driver.current_url)))
 
-        def teaarDown(self):
+        def tearDown(self):
             self.driver.quit()
 
 if __name__ == '__main__':
